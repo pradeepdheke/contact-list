@@ -1,0 +1,19 @@
+* {
+    box-sizing: border-box;
+}
+body {
+    padding: 0;
+}
+
+.wrapper {
+    background: linear-gradient(rgb(120, 202, 223), rgb(135, 161, 94));
+    min-height: 100vh;
+}
+
+i {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    background: rgb(184, 159, 128);
+
+}
