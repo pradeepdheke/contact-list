@@ -1,16 +1,13 @@
 const listElm = document.querySelector("#list");
 const apiUrl = "https://randomuser.me/api/?";
 
-const fetchUsers = (params= "results=20") => {
-    fetch(apiUrl+params)
-    .then((response) => response.json())
-    .then((data) => {
-        const user = data.results;
-        let str ="";
+let userArgs = [];
+const displayUser = (args = userArgs) => {
+    let str = "";
 
-        user.map((usr) => {
-            str += `
-            <div class="col-md-6 col-lg-3 py-3">
+    args.map(usr => {
+        str += `
+        <div class="col-md-6 col-lg-3 py-3">
             <div class="card">
                 <img src="${usr.picture.large}" class="card-img-top" alt="...">
                 <div class="card-body">
@@ -33,21 +30,27 @@ const fetchUsers = (params= "results=20") => {
               </div>
         </div>
         `;
-
-        });
-        listElm.innerHTML = str;
-
     });
 
-    // .catch(
-    //     err =>
-    //     (listElm.innerHTML = `<div class = "alert  alert-danger" role="alert">
-    //     Oops! Something went wrong.
-    //     </div>
-        
-    //     `
-    //     );
-    // );
+    listElm.innerHTML = str;
+};
+
+const fetchUsers = (params= "results=20") => {
+    fetch(apiUrl+params)
+    .then((response) => response.json())
+    .then((data) => {
+        // const user = data.results;
+        userArgs = data.results;
+        displayUser();
+    })
+    
+    .catch(
+        err => {
+            listElm.innerHTML = `<div class = "alert  alert-danger" role="alert">
+        Oops! Something went wrong.
+        </div> `;
+
+        });
 };
 
 fetchUsers();
@@ -60,3 +63,18 @@ const handleOnChange = e => {
     fetchUsers(params);
 };
 
+const handleOnSearch = () => {
+    const searchStr = document.getElementById("search").value;
+
+    const filteredUser = userArgs.filter(item => {
+        // console.log(item);
+        const userName = `${item?.name?.first} ${item?.name?.last}`;
+
+        if(userName.toLowerCase().includes(searchStr.toLowerCase())) {
+            return item;
+
+        };
+    });
+    displayUser(filteredUser);
+    console.log(filteredUser);
+};
